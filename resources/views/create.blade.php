@@ -40,6 +40,8 @@
                 <input type="number" name="harga" class="form-control" placeholder="Harga" value="{{ old('harga') }}" required>
             </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
+            <!-- Tombol Kembali -->
+            <a href="{{ route('users.index') }}" class="btn btn-secondary ml-2">Kembali</a>
         </form>
     </div>
 </body>

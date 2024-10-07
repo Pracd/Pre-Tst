@@ -39,6 +39,7 @@
                         <td>{{ $user->nama }}</td>
                         <td>{{ $user->umur }}</td>
                         <td>
+                            <!-- Tombol Info -->
                             <button type="button" class="btn btn-info btn-sm btn-info-user" 
                                     data-toggle="modal" 
                                     data-target="#infoModal"
@@ -48,12 +49,18 @@
                                     data-harga="Rp. {{ $user->harga }}">
                                 Info
                             </button>
+                            
+                            <!-- Tombol Edit -->
                             <a href="{{ route('users.edit', $user->id_user) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('users.destroy', $user->id_user) }}" method="POST" style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
+
+                            <!-- Tombol Delete dengan Modal -->
+                            <button type="button" class="btn btn-danger btn-sm btn-delete-user" 
+                                    data-toggle="modal" 
+                                    data-target="#deleteModal"
+                                    data-id="{{ $user->id_user }}"
+                                    data-nama="{{ $user->nama }}">
+                                Delete
+                            </button>
                         </td>
                     </tr>
                 @empty
@@ -65,7 +72,7 @@
         </table>
     </div>
 
-    <!-- Modal Bootstrap -->
+    <!-- Modal Bootstrap untuk Info -->
     <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -88,24 +95,57 @@
         </div>
     </div>
 
+    <!-- Modal Bootstrap untuk Konfirmasi Delete -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin menghapus user <strong id="deleteUserName"></strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        // Script to handle click event and populate the modal with user data
+        // Script untuk mempopulasi modal dengan data user
         $(document).on('click', '.btn-info-user', function() {
             var nama = $(this).data('nama');
             var umur = $(this).data('umur');
             var judul = $(this).data('judul');
             var harga = $(this).data('harga');
 
-            // Set the modal content with user data
+            // Set konten modal dengan data user
             $('#modalNama').text(nama);
             $('#modalUmur').text(umur);
             $('#modalJudul').text(judul);
             $('#modalHarga').text(harga);
+        });
+
+        // Script untuk menampilkan modal delete dengan data dinamis
+        $(document).on('click', '.btn-delete-user', function() {
+            var nama = $(this).data('nama');
+            var id = $(this).data('id');
+            $('#deleteUserName').text(nama);
+            $('#deleteForm').attr('action', '/users/' + id);
         });
     </script>
 </body>

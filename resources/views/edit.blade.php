@@ -39,6 +39,8 @@
 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            <!-- Tombol Kembali -->
+            <a href="{{ route('users.index') }}" class="btn btn-secondary ml-2">Kembali</a>
         </form>
     </div>
 </body>
